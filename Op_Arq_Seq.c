@@ -18,7 +18,7 @@ int main(){
 		for (i=0;i<numCampos;i++){
 			printf("Digite Campo %d:",i);
 			scanf("%15s",campos);
-			fprintf(fout,"%15s|",campos);
+			fprintf(fout,"%-15s|",campos);
 		}
 		fprintf(fout,"\n");
 	}
