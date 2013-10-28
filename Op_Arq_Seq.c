@@ -22,4 +22,5 @@ int main(){
 		}
 		fprintf(fout,"\n");
 	}
+	fclose(fout);
 }
