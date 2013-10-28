@@ -9,13 +9,16 @@ int main(){
 		return -1;
 	}
 	int numRegistros,numCampos,j,i;
-	scanf("Informe o numero de registros: %d \n",&numResgistros);
-	scanf("Informe o numero de campos: %d \n",&numCampos);
+	printf("Informe o numero de registros: ");
+	scanf("%d",&numRegistros);
+	printf("Informe o numero de campos: ");
+	scanf("%d",&numCampos);
 	char* campos = malloc(15*sizeof(char));
 	for (j=0;j<numRegistros;j++){
 		for (i=0;i<numCampos;i++){
-			scanf("Digite Campo %d: %15s\n",&campos);
-			fprintf(fout,"%15s|");
+			printf("Digite Campo %d:",i);
+			scanf("%15s",campos);
+			fprintf(fout,"%15s|",campos);
 		}
 		fprintf(fout,"\n");
 	}
