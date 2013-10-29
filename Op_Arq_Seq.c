@@ -68,40 +68,159 @@ int get_qtd_campos(char* nome_arquivo){
 
 func* leitura_funcionario(FILE* file){
 	func* f;
+	FILE * fin = fopen("questao3.txt","r");
 	f= malloc(sizeof(func));
-	if (fscanf(file,"%d%*c%5[^|]|%15[^|]|%15[^|]|%d|%c|%15[^|]|%c|%d",&(*f).id,(*f).num_mat,(*f).nome,(*f).cargo,&(*f).escolaridade,&(*f).sexo,(*f).local,&(*f).est_civil,&(*f).salario)==9){
-		imprime_func(*f);
+//	printf("a\n");
+	if (fscanf(file,"%d%*c%5[^|]|%15[^|]|%15[^|]|%d|%c|%15[^|]|%c|%d|\n",&(*f).id,(*f).num_mat,(*f).nome,(*f).cargo,&(*f).escolaridade,&(*f).sexo,(*f).local,&(*f).est_civil,&(*f).salario)==9){
+	//	imprime_func(f);
 		return f;
-	}else
-		return NULL;
+	}//else
 }
 
-void imprime_func(func f){
-	printf("Funcionario: %d %s %s %s %d %c %s %c %d\n",f.id,f.num_mat,f.nome,f.cargo,f.escolaridade,f.sexo,f.local,f.est_civil,f.salario);
+void imprime_func(func* f){
+	if (f!=NULL)
+		printf("Funcionario: %d %s %s %s %d %c %s %c %d\n",(*f).id,(*f).num_mat,(*f).nome,(*f).cargo,(*f).escolaridade,(*f).sexo,(*f).local,(*f).est_civil,(*f).salario);
+	
 }
 
-//questao 3
-int consulta_arq_sequencial(char* nome_arquivo,char* matricula,char sexo, int sal){
+//questao 3 consulta por matricula
+func* consulta_matricula(char* nome_arquivo,char* matricula){
 	func* temp;
 	FILE* f = fopen("questao3.txt","r");
-	
+//	int achou = 0;	
 	if (matricula!= NULL){
 		temp= leitura_funcionario(f);
-		if ((*temp).num_mat==matricula)
-			return 1;
-		else
-			return 0;
-	}else {
-		//if (
-	}	 
-	return 1;
+		while(temp){
+//			printf("%s %s ",(*temp).num_mat,matricula);
+			if (!strcmp((*temp).num_mat,matricula)){
+				fclose(f);
+				return temp;		
+			}
+		temp=leitura_funcionario(f);
+		}
+	}
+	fclose(f);
+	return NULL;	
 }
 
 
+
+//questao 3 consulta por sexo
+void  consulta_sexo(char* nome_arquivo,char sexo){
+	func* temp;
+	FILE* f = fopen("questao3.txt","r");
+//	int achou = 0;	
+//	if (matricula!= NULL){
+		temp= leitura_funcionario(f);
+		while(temp){
+//			printf("%c %c \n",(*temp).sexo,sexo);
+			if ((*temp).sexo==sexo)
+				imprime_func(temp);
+			temp=leitura_funcionario(f);
+			
+		}
+//	}
+//	return NULL;	
+}
+
+//questao 3 consulta de funcionario com base no salario
+void  consulta_salario(char* nome_arquivo,int salario){
+	func* temp;
+	FILE* f = fopen("questao3.txt","r");
+//	int achou = 0;	
+//	if (matricula!= NULL){
+		temp= leitura_funcionario(f);
+		while(temp){
+//			printf("%c %c \n",(*temp).sexo,sexo);
+			if ((*temp).salario>=salario)
+				imprime_func(temp);
+			temp=leitura_funcionario(f);
+			
+		}
+//	}
+//	return NULL;	
+}
+
+//questao 3 consulta por media de salario
+void  consulta_media_salario(char* nome_arquivo){
+	func* temp;
+	FILE* f = fopen("questao3.txt","r");
+//	int achou = 0;	
+//	if (matricula!= NULL){
+		int cont;
+		long soma;
+		cont=0;
+		soma=0;
+		temp= leitura_funcionario(f);
+		while(temp){
+//			printf("%c %c \n",(*temp).sexo,sexo);
+		//	if ((*temp).salario>=salario)
+		//		imprime_func(temp);
+			soma=soma + (*temp).salario;
+			temp=leitura_funcionario(f);
+			cont++;
+		}
+//		printf(" %llu %d\n",soma,cont);
+		float media = soma/cont;
+		fseek(f,0,SEEK_SET);
+		temp=leitura_funcionario(f);
+		while(temp){
+//			printf("%c %c \n",(*temp).salario,media);
+			if ((*temp).salario>=media)
+				imprime_func(temp);
+			temp=leitura_funcionario(f);
+		}
+//	}
+//	return NULL;	
+}
+
+//questao 3 consulta por (cargo e sexo) ou matricula
+void  consulta_cargo_sexo_matricula(char* nome_arquivo,char* cargo,char sexo1,int matricula,char sexo2){
+	func* temp;
+	FILE* f = fopen("questao3.txt","r");
+	int achou = 0;	
+//	if (matricula!= NULL){
+		
+	temp= leitura_funcionario(f);
+	while(temp){
+//			printf("%c %c \n",(*temp).sexo,sexo);
+		if ((!strcmp((*temp).cargo,cargo)&&((*temp).sexo==sexo1))){
+			achou=1;
+			imprime_func(temp);
+		}
+			temp=leitura_funcionario(f);
+	}
+//	fclose(f);
+	fseek(f,0,SEEK_SET);
+//	temp= consulta_matricula("questao3.txt",matricula);
+	temp= leitura_funcionario(f);
+
+	while (temp){
+	//	imprime_func(temp);
+		if ( (atoi((*temp).num_mat)>matricula) && ((*temp).sexo==sexo2) ){
+			achou=1;
+		//	printf("achou");
+			imprime_func(temp);
+		}
+		temp=leitura_funcionario(f);
+	}
+	fclose(f);
+	if (!achou)
+		printf("Sem resultados\n");
+}
 
 int main(){
 //	escrita_arq_sequencial("saida.txt");
-	leitura_arq_sequencial("questao3.txt");
-	FILE* f = fopen("questao3.txt","r");
-	leitura_funcionario(f);
+//	leitura_arq_sequencial("questao3.txt");
+/*	FILE* f = fopen("questao3.txt","r");
+	int i;
+	for (i=0;i<5;i++) imprime_func(leitura_funcionario(f));
+	fclose(f);
+*/
+	printf("resultado:\n ");
+//	imprime_func(consulta_matricula("questao3.txt","950"));
+//	consulta_sexo("questao3.txt",'F');
+//	consulta_salario("questao3.txt",9000);
+//	consulta_media_salario("questao3.txt");
+	consulta_cargo_sexo_matricula("questao3.txt","programador",'F',700,'M');
 }
