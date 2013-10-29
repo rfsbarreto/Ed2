@@ -41,6 +41,7 @@ int leitura_arq_sequencial(char* nome_arquivo){
 	while (!(fscanf(fin,"%15[^|]|%15[^|]|\n",campo1,campo2)!=2)){
 		printf("Numero: %s Nome: %s\n",campo1,campo2);
 	}
+	fclose(fin);
 }
 
 int get_qtd_campos(char* nome_arquivo){
@@ -55,7 +56,6 @@ int get_qtd_campos(char* nome_arquivo){
 
 int main(){
 	escrita_arq_sequencial("saida.txt");
-	printf("qtd: %d \n",get_qtd_campos("saida.txt"));
 	leitura_arq_sequencial("saida.txt");
 
 }
