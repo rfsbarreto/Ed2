@@ -1,12 +1,13 @@
 #include <stdio.h>
 
-int main(){
+//questao 1
+int escrita_arq_sequencial(char* nome_arquivo){
 	FILE* fout;
-	fout=fopen("saida.txt","w");
+	fout=fopen(nome_arquivo,"w");
 	
 	if (!fout){
 		printf("Erro ao abrir arquivo");
-		return -1;
+		exit(-1);
 	}
 	int numRegistros,numCampos,j,i;
 	printf("Informe o numero de registros: ");
@@ -23,4 +24,38 @@ int main(){
 		fprintf(fout,"\n");
 	}
 	fclose(fout);
+	return 0;
+}
+
+//questao 2
+int leitura_arq_sequencial(char* nome_arquivo){
+	FILE* fin = fopen(nome_arquivo,"r");
+	if (!fin){
+		printf("Erro ao abrir arquivo");
+		exit(-1);
+	}
+
+	char* campo2= malloc(15*sizeof(char));
+	char* campo1= malloc(15*sizeof(char));
+
+	while (!(fscanf(fin,"%15[^|]|%15[^|]|\n",campo1,campo2)!=2)){
+		printf("Numero: %s Nome: %s\n",campo1,campo2);
+	}
+}
+
+int get_qtd_campos(char* nome_arquivo){
+	FILE* fin;
+	fin=fopen(nome_arquivo,"r");
+	char* temp;
+	int cont=0;
+	while(fscanf(fin,"%15[^|\n]|",temp)==1)
+		cont++;
+	return cont;
+}
+
+int main(){
+	escrita_arq_sequencial("saida.txt");
+	printf("qtd: %d \n",get_qtd_campos("saida.txt"));
+	leitura_arq_sequencial("saida.txt");
+
 }
