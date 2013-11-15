@@ -70,11 +70,11 @@ func* leitura_funcionario(FILE* file){
 	func* f;
 	FILE * fin = fopen("questao3.txt","r");
 	f= malloc(sizeof(func));
-//	printf("a\n");
+
 	if (fscanf(file,"%d%*c%5[^|]|%15[^|]|%15[^|]|%d|%c|%15[^|]|%c|%d|\n",&(*f).id,(*f).num_mat,(*f).nome,(*f).cargo,&(*f).escolaridade,&(*f).sexo,(*f).local,&(*f).est_civil,&(*f).salario)==9){
-	//	imprime_func(f);
+	
 		return f;
-	}//else
+	}
 }
 
 void imprime_func(func* f){
@@ -87,11 +87,11 @@ void imprime_func(func* f){
 func* consulta_matricula(char* nome_arquivo,char* matricula){
 	func* temp;
 	FILE* f = fopen("questao3.txt","r");
-//	int achou = 0;	
+
 	if (matricula!= NULL){
 		temp= leitura_funcionario(f);
 		while(temp){
-//			printf("%s %s ",(*temp).num_mat,matricula);
+
 			if (!strcmp((*temp).num_mat,matricula)){
 				fclose(f);
 				return temp;		
@@ -106,100 +106,111 @@ func* consulta_matricula(char* nome_arquivo,char* matricula){
 
 
 //questao 3 consulta por sexo
+/* Entrada: nome_arquivo-> usado para arbetura do arquivo; sexo -> campo utilizado na consulta
+*	Retorno: Vazio
+*  Esta funcao imprime durante a execucao os registros do arquivo onde o sexo e igual ao passado por parametro. 
+***********************************************************************************************************/
 void  consulta_sexo(char* nome_arquivo,char sexo){
 	func* temp;
 	FILE* f = fopen("questao3.txt","r");
-//	int achou = 0;	
-//	if (matricula!= NULL){
+
 		temp= leitura_funcionario(f);
 		while(temp){
-//			printf("%c %c \n",(*temp).sexo,sexo);
+
 			if ((*temp).sexo==sexo)
 				imprime_func(temp);
 			temp=leitura_funcionario(f);
 			
 		}
-//	}
-//	return NULL;	
+	
 }
 
 //questao 3 consulta de funcionario com base no salario
+/* Entrada: nome_arquivo-> usado para arbetura do arquivo; salario -> campo utilizado na consulta
+*	Retorno: Vazio
+*  Esta funcao imprime durante a execucao os registros do arquivo cujo salarios são maiore que o salario passado por parametro. 
+***********************************************************************************************************/
 void  consulta_salario(char* nome_arquivo,int salario){
 	func* temp;
 	FILE* f = fopen("questao3.txt","r");
-//	int achou = 0;	
-//	if (matricula!= NULL){
+
 		temp= leitura_funcionario(f);
 		while(temp){
-//			printf("%c %c \n",(*temp).sexo,sexo);
+
 			if ((*temp).salario>=salario)
 				imprime_func(temp);
 			temp=leitura_funcionario(f);
 			
 		}
-//	}
-//	return NULL;	
+	
 }
 
 //questao 3 consulta por media de salario
+/* Entrada: nome_arquivo-> usado para arbetura do arquivo;
+*	Retorno: Vazio
+*  Esta funcao calcula a media salarial dos registros e 
+*  imprime durante a execucao os registros do arquivo cujo campos são maiores que a media salarial. 
+***********************************************************************************************************/
 void  consulta_media_salario(char* nome_arquivo){
 	func* temp;
 	FILE* f = fopen("questao3.txt","r");
-//	int achou = 0;	
-//	if (matricula!= NULL){
+
 		int cont;
 		long soma;
 		cont=0;
 		soma=0;
 		temp= leitura_funcionario(f);
 		while(temp){
-//			printf("%c %c \n",(*temp).sexo,sexo);
-		//	if ((*temp).salario>=salario)
-		//		imprime_func(temp);
+
 			soma=soma + (*temp).salario;
 			temp=leitura_funcionario(f);
 			cont++;
 		}
-//		printf(" %llu %d\n",soma,cont);
+
 		float media = soma/cont;
 		fseek(f,0,SEEK_SET);
 		temp=leitura_funcionario(f);
 		while(temp){
-//			printf("%c %c \n",(*temp).salario,media);
+
 			if ((*temp).salario>=media)
 				imprime_func(temp);
 			temp=leitura_funcionario(f);
 		}
-//	}
-//	return NULL;	
+
+	
 }
 
 //questao 3 consulta por (cargo e sexo) ou matricula
+/* Entrada: nome_arquivo-> usado para arbetura do arquivo; cargo,sexo1,matricula,sexo2-> parametros de busca
+*	Retorno: Vazio
+*  Esta funcao imprime durante a execucao os registros do arquivo cujo campos satisfazem a consulta:
+*   (reg.cargo=cargo e reg.sexo=sexo) ou (reg.matricula=matricula e reg.sexo=sexo) 
+***********************************************************************************************************/
 void  consulta_cargo_sexo_matricula(char* nome_arquivo,char* cargo,char sexo1,int matricula,char sexo2){
 	func* temp;
 	FILE* f = fopen("questao3.txt","r");
 	int achou = 0;	
-//	if (matricula!= NULL){
+
 		
 	temp= leitura_funcionario(f);
 	while(temp){
-//			printf("%c %c \n",(*temp).sexo,sexo);
+			
 		if ((!strcmp((*temp).cargo,cargo)&&((*temp).sexo==sexo1))){
 			achou=1;
 			imprime_func(temp);
 		}
 			temp=leitura_funcionario(f);
 	}
-//	fclose(f);
+
 	fseek(f,0,SEEK_SET);
-//	temp= consulta_matricula("questao3.txt",matricula);
+
 	temp= leitura_funcionario(f);
 
 	while (temp){
-	//	imprime_func(temp);
+
 		if ( (atoi((*temp).num_mat)>matricula) && ((*temp).sexo==sexo2) ){
 			achou=1;
-		//	printf("achou");
+		
 			imprime_func(temp);
 		}
 		temp=leitura_funcionario(f);
@@ -209,18 +220,103 @@ void  consulta_cargo_sexo_matricula(char* nome_arquivo,char* cargo,char sexo1,in
 		printf("Sem resultados\n");
 }
 
+
+int menu(){
+	int m = 10;
+		printf("0 - para sair \n");
+		printf("1 - consulta por matricula\n");
+		printf("2 - consulta por sexo\n");
+		printf("3 - consulta por salario\n");
+		printf("4 - consulta por media salario\n");
+		printf("5 - consulta por cargo,sexo e matricula\n");
+		
+		while(m != 0){
+			printf("Entre com uma das opcoes acima:",m);
+			scanf("%d",&m);
+			printf(" \n\n");
+			
+			switch (m){
+			case 0:
+				system("exit");
+				break;
+			
+			case 1:
+				printf("resultado:\n ");
+				imprime_func(consulta_matricula("questao3.txt","950"));
+				printf(" \n\n");
+				break;
+			case 2:
+				printf("resultado:\n ");
+				consulta_sexo("questao3.txt",'F');
+				break;
+			case 3:
+				printf("resultado:\n ");
+				consulta_salario("questao3.txt",9000);
+				break;
+			case 4:
+				printf("resultado:\n ");
+				consulta_media_salario("questao3.txt");
+				break;
+			case 5:
+				printf("resultado:\n ");
+				consulta_cargo_sexo_matricula("questao3.txt","programador",'F',700,'M');
+				break;
+			default:
+				printf("valor invalido\n");
+			}
+			
+		}
+		return 0;
+}
 int main(){
-//	escrita_arq_sequencial("saida.txt");
-//	leitura_arq_sequencial("questao3.txt");
-/*	FILE* f = fopen("questao3.txt","r");
-	int i;
-	for (i=0;i<5;i++) imprime_func(leitura_funcionario(f));
-	fclose(f);
-*/
-	printf("resultado:\n ");
-//	imprime_func(consulta_matricula("questao3.txt","950"));
-//	consulta_sexo("questao3.txt",'F');
-//	consulta_salario("questao3.txt",9000);
-//	consulta_media_salario("questao3.txt");
-	consulta_cargo_sexo_matricula("questao3.txt","programador",'F',700,'M');
+	
+	int n=10;
+	int i;	
+	FILE* f;// = fopen("questao3.txt","r");
+	
+	printf("1 - para escrita (questao 1) \n");
+	printf("2 - para leitura (questao 2) \n");
+	printf("3 - para leitura (questao 2) \n");
+	printf("4 - para consulta(questao 3) \n");
+	printf("0 - para sair \n");
+	
+	while(n != 0){
+		printf(" \n\n");
+		printf("Entre com uma das opcoes acima:",n);
+		scanf("%d",&n);
+	
+	
+		switch (n){
+			case 0:
+				system("exit");
+				break;
+				
+			case 1:
+				printf(" \n\n");
+				escrita_arq_sequencial("saida.txt");
+
+			break;
+			
+			case 2:
+				printf(" \n\n");
+				leitura_arq_sequencial("saida.txt");
+			
+			break;
+			
+			case 3:
+
+			f = fopen("questao3.txt","r");
+			for (i=0;i<5;i++) imprime_func(leitura_funcionario(f));
+			fclose(f);
+			break;
+			
+			case 4:
+				menu();
+				printf(" \n\n");
+			
+			default :
+			printf("opcao invalida\n");
+		}
+	}
+	
 }
